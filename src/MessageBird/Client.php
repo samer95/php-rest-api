@@ -12,12 +12,15 @@ class Client
     const ENDPOINT = 'https://rest.messagebird.com';
     const CHATAPI_ENDPOINT = 'https://chat.messagebird.com/1';
     const CONVERSATIONSAPI_ENDPOINT = 'https://conversations.messagebird.com/v1';
+    const INBOXCONTACTSAPI_ENDPOINT = 'https://contacts.messagebird.com/v2';
     const VOICEAPI_ENDPOINT = 'https://voice.messagebird.com';
     const PARTNER_ACCOUNT_ENDPOINT = 'https://partner-accounts.messagebird.com';
     const NUMBERSAPI_ENDPOINT = 'https://numbers.messagebird.com/v1';
 
     const ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX = 'ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX';
+    const ENABLE_INBOXCONTACTSAPI_WHATSAPP_SANDBOX = 'ENABLE_INBOXCONTACTSAPI_WHATSAPP_SANDBOX';
     const CONVERSATIONSAPI_WHATSAPP_SANDBOX_ENDPOINT = 'https://whatsapp-sandbox.messagebird.com/v1';
+    const INBOXCONTACTSAPI_WHATSAPP_SANDBOX_ENDPOINT = 'https://whatsapp-sandbox.messagebird.com/v2';
 
     const CLIENT_VERSION = '1.19.2';
 
@@ -142,6 +145,11 @@ class Client
     public $conversations;
 
     /**
+     * @var Resources\Conversation\Contacts;
+     */
+    public $inboxContacts;
+
+    /**
      * @var Resources\Conversation\Messages;
      */
     public $conversationMessages;
@@ -179,6 +187,11 @@ class Client
     /**
      * @var Common\HttpClient
      */
+    protected $InboxContactsAPIHttpClient;
+
+    /**
+     * @var Common\HttpClient
+     */
     protected $VoiceAPIHttpClient;
 
     /**
@@ -195,6 +208,7 @@ class Client
         if ($httpClient === null) {
             $this->ChatAPIHttpClient = new Common\HttpClient(self::CHATAPI_ENDPOINT);
             $this->ConversationsAPIHttpClient = new Common\HttpClient(in_array(self::ENABLE_CONVERSATIONSAPI_WHATSAPP_SANDBOX, $config) ? self::CONVERSATIONSAPI_WHATSAPP_SANDBOX_ENDPOINT : self::CONVERSATIONSAPI_ENDPOINT);
+            $this->InboxContactsAPIHttpClient = new Common\HttpClient(in_array(self::ENABLE_INBOXCONTACTSAPI_WHATSAPP_SANDBOX, $config) ? self::INBOXCONTACTSAPI_WHATSAPP_SANDBOX_ENDPOINT : self::INBOXCONTACTSAPI_ENDPOINT);
             $this->HttpClient = new Common\HttpClient(self::ENDPOINT);
             $this->VoiceAPIHttpClient = new Common\HttpClient(self::VOICEAPI_ENDPOINT, 10, 2, array(
                 'X-MessageBird-Version' => '20170314',
@@ -204,6 +218,7 @@ class Client
         } else {
             $this->ChatAPIHttpClient = $httpClient;
             $this->ConversationsAPIHttpClient = $httpClient;
+            $this->InboxContactsAPIHttpClient = $httpClient;
             $this->HttpClient = $httpClient;
             $this->VoiceAPIHttpClient = $httpClient;
             $this->partnerAccountClient = $httpClient;
@@ -218,6 +233,9 @@ class Client
 
         $this->ConversationsAPIHttpClient->addUserAgentString('MessageBird/ApiClient/' . self::CLIENT_VERSION);
         $this->ConversationsAPIHttpClient->addUserAgentString($this->getPhpVersion());
+
+        $this->InboxContactsAPIHttpClient->addUserAgentString('MessageBird/ApiClient/' . self::CLIENT_VERSION);
+        $this->InboxContactsAPIHttpClient->addUserAgentString($this->getPhpVersion());
 
         $this->VoiceAPIHttpClient->addUserAgentString('MessageBird/ApiClient/' . self::CLIENT_VERSION);
         $this->VoiceAPIHttpClient->addUserAgentString($this->getPhpVersion());
@@ -253,6 +271,7 @@ class Client
         $this->contacts = new Resources\Contacts($this->HttpClient);
         $this->groups = new Resources\Groups($this->HttpClient);
         $this->conversations = new Resources\Conversation\Conversations($this->ConversationsAPIHttpClient);
+        $this->inboxContacts = new Resources\Conversation\Contacts($this->InboxContactsAPIHttpClient);
         $this->conversationMessages = new Resources\Conversation\Messages($this->ConversationsAPIHttpClient);
         $this->conversationSend = new Resources\Conversation\Send($this->ConversationsAPIHttpClient);
         $this->conversationWebhooks = new Resources\Conversation\Webhooks($this->ConversationsAPIHttpClient);
@@ -270,6 +289,7 @@ class Client
 
         $this->ChatAPIHttpClient->setAuthentication($Authentication);
         $this->ConversationsAPIHttpClient->setAuthentication($Authentication);
+        $this->InboxContactsAPIHttpClient->setAuthentication($Authentication);
         $this->HttpClient->setAuthentication($Authentication);
         $this->VoiceAPIHttpClient->setAuthentication($Authentication);
         $this->partnerAccountClient->setAuthentication($Authentication);
