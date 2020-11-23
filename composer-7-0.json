@@ -2,7 +2,7 @@
     "name": "messagebird/php-rest-api",
     "description": "MessageBird REST API client for PHP",
     "type": "library",
-    "homepage": "https://github.com/messagebird/php-rest-api",
+    "homepage": "https://github.com/samer95/php-rest-api",
     "license": "BSD-2-Clause",
     "authors": [
         {

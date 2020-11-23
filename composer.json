@@ -1,5 +1,5 @@
 {
-    "name": "samer95/php-rest-api",
+    "name": "messagebird-php-api",
     "description": "MessageBird REST API client for PHP",
     "type": "library",
     "homepage": "https://github.com/samer95/php-rest-api",
