@@ -278,7 +278,7 @@ class Client
         $this->conversations = new Resources\Conversation\Conversations($this->ConversationsAPIHttpClient);
         $this->inboxContacts = new Resources\Conversation\Contacts($this->InboxContactsAPIHttpClient);
         $this->conversationMessages = new Resources\Conversation\Messages($this->ConversationsAPIHttpClient);
-        $this->contactsIdentifiers = new Resources\Conversation\ContactIdentifiers($this->ConversationsAPIHttpClient);
+        $this->contactsIdentifiers = new Resources\Conversation\ContactIdentifiers($this->InboxContactsAPIHttpClient);
         $this->conversationSend = new Resources\Conversation\Send($this->ConversationsAPIHttpClient);
         $this->conversationWebhooks = new Resources\Conversation\Webhooks($this->ConversationsAPIHttpClient);
         $this->partnerAccounts = new Resources\PartnerAccount\Accounts($this->partnerAccountClient);

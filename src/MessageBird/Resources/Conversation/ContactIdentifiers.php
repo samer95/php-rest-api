@@ -73,7 +73,7 @@ class ContactIdentifiers
      */
     public function create($contactId, $object, $query = null)
     {
-        $body = json_encode($object);
+        $body = json_encode($object->jsonSerialize());
 
         list(, , $body) = $this->httpClient->performHttpRequest(
             HttpClient::REQUEST_POST,
