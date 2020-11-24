@@ -3,7 +3,7 @@
 namespace MessageBird\Resources\Conversation;
 
 use MessageBird\Common\HttpClient;
-use MessageBird\Objects\Conversation\Contact;
+use MessageBird\Objects\Conversation\InboxContact;
 use MessageBird\Resources\Base;
 
 class Contacts extends Base
@@ -14,7 +14,7 @@ class Contacts extends Base
     {
         parent::__construct($httpClient);
 
-        $this->setObject(new Contact());
+        $this->setObject(new InboxContact());
         $this->setResourceName(self::RESOURCE_NAME);
     }
 }
